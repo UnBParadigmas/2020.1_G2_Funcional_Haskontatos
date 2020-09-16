@@ -21,6 +21,11 @@ addContact :: ContactList -> Contact -> IO ContactList
 addContact list contact = return (ContactList {contacts=contact : (contacts list)})
 
 
+addContacts :: ContactList -> [Contacts] ->  IO ContactList
+addContacts list [] = list
+addContacts list [contact] = addContact list contact
+addContacts list (currentContact:otherContacts) = addContacts (addContact list currentContact) otherContacts
+
 data Contact = Contact {
     name :: String,
     email :: String,
