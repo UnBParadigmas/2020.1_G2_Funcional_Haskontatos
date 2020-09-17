@@ -3,28 +3,17 @@ module ContactList
     ( 
      Contact,
      createContact,
-     ContactList,
      addContact,
-     createContactList
+     getNextBirthdays,
     ) where
 
 import Data.Time ( Day, diffDays, fromGregorian, toGregorian )
 
-data ContactList = ContactList {
-    contacts :: [Contact]
-} deriving (Eq, Show, Read)
+addContact :: [Contact] -> Contact -> [Contact]
+addContact contactList contact = contact:contactList
 
-createContactList :: IO ContactList
-createContactList = return (ContactList {contacts=[]})
-
-addContact :: ContactList -> Contact -> IO ContactList
-addContact list contact = return (ContactList {contacts=contact : (contacts list)})
-
-
-addContacts :: ContactList -> [Contacts] ->  IO ContactList
-addContacts list [] = list
-addContacts list [contact] = addContact list contact
-addContacts list (currentContact:otherContacts) = addContacts (addContact list currentContact) otherContacts
+getNextBirthdays :: Day -> [Contact] -> [Contact]
+getNextBirthdays currentDay contacts = [x | x <- contacts, daysToBirthday currentDay x < 30]
 
 data Contact = Contact {
     name :: String,
@@ -33,8 +22,8 @@ data Contact = Contact {
     birthday :: Day 
 } deriving (Eq, Show, Read)
 
-createContact :: String -> String -> String -> Day -> IO Contact
-createContact name email telephone birthday = return (Contact name email telephone birthday)
+createContact :: String -> String -> String -> Day -> Contact
+createContact name email telephone birthday = Contact name email telephone birthday
 
 isBirthday :: Day -> Contact -> Bool
 isBirthday today contact = daysToBirthday today contact == 0

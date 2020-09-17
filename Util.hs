@@ -14,5 +14,5 @@ dayFromString dateStr = fromGregorian year month day
                 year = read (take 4 (snd (splitAt 6 dateStr))) :: Integer
 
 
-getCurrentDate :: IO (Integer,Int,Int)
-getCurrentDate = getCurrentTime >>= return . toGregorian . utctDay
+getCurrentDate :: IO Day
+getCurrentDate = getCurrentTime >>= return . utctDay

@@ -3,40 +3,48 @@ module Main (main) where
 import ContactList (
     Contact,
     createContact,
-    ContactList,
     addContact,
-    createContactList
+    getNextBirthdays
     )
 
 import Util (
-    dayFromString
+    dayFromString,
+    getCurrentDate
     )
 
 import Data.Time (
-    Day
+    Day,
+    addDays
     )
+
+import System.Process
 
 
 main :: IO ()
 main = do   
-    contactList <- createContactList;
-    programLoop contactList;
+    -- todo: Read from file
+    programLoop [];
+    -- todo: Save on close
 
+programLoop :: [Contact] -> IO b
 programLoop contactList = do 
+
     putStrLn "Menu";
     putStrLn "1 - Adicionar Contato";
     putStrLn "2 - Ver tudo";
-
+   
     selection <- getLine;
     
     case selection of
         "1" -> do 
             contact <- getContactFromUser;
-            contactList <- addContact contactList contact 
+            contactList <- return (addContact contactList contact)
             programLoop contactList;
         "2" -> do
             putStrLn (show contactList);
             programLoop contactList;
+
+
 
 getContactFromUser :: IO Contact
 getContactFromUser = do
@@ -52,7 +60,7 @@ getContactFromUser = do
     putStrLn "Insira a data de nascimento (DD/MM/YYYY):";
     birthday <- getLine;
 
-    newContact <- createContact name email number (dayFromString birthday);
+    newContact <- return (createContact name email number (dayFromString birthday));
     return newContact;
 
 
