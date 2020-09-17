@@ -18,18 +18,57 @@ import Data.Time (
     )
 
 import System.Process
+import System.IO
+import System.Directory
 
+saveFilepath :: String
+saveFilepath = "./haskontatos.txt"
 
 main :: IO ()
 main = do   
-    -- todo: Read from file
-    programLoop [];
-    -- todo: Save on close
-
-programLoop :: [Contact] -> IO b
-programLoop contactList = do 
 
     system "clear";
+
+    startupList <- readSavedFile; 
+    contacts <- programLoop startupList;
+    preapreQuit contacts;
+
+readSavedFile :: IO [Contact]
+readSavedFile = do
+    
+    fileExist <- doesFileExist saveFilepath
+        
+    if fileExist
+        then do
+            content <- readFile saveFilepath
+            return (read content) 
+        else return []
+
+saveToSaveFile :: [Contact] -> IO ()
+saveToSaveFile contacts = do
+    writeFile saveFilepath (show contacts)
+    putStrLn "Salvo!" 
+
+preapreQuit :: [Contact] -> IO ()
+preapreQuit contactList = do 
+    putStrLn "Salvar? S/N"
+    choice <- getLine;
+
+    case choice of
+        "S" -> do
+            saveToSaveFile contactList;
+            return ()
+        "N" -> do
+            return ()
+        otherwise -> do
+            putStrLn "Resposta invalida..."
+            preapreQuit contactList;
+
+
+
+programLoop :: [Contact] -> IO [Contact]
+programLoop contactList = do 
+
     putStrLn "====================HASKONTATOS===================="
     
     currentDate <- getCurrentDate
@@ -42,27 +81,32 @@ programLoop contactList = do
     putStrLn "====================HASKONTATOS===================="
 
     putStrLn "Operações";
+    putStrLn "0 - Sair";
     putStrLn "1 - Adicionar Contato";
     putStrLn "2 - Ver tudo";
    
     selection <- getLine;
     
     case selection of
+        "0" -> do
+            system "clear";
+            return contactList;
         "1" -> do 
+            system "clear";
             contact <- getContactFromUser;
             contactList <- return (addContact contactList contact)
-            programLoop contactList;
+            contactList <- programLoop contactList;
+            return contactList;
         "2" -> do
             putStrLn (show contactList);
-            programLoop contactList;
+            contactList <- programLoop contactList;
+            return contactList;
 
 showNextBirthdays :: [Contact] -> IO ()
 showNextBirthdays contactList = do
 
-    putStrLn "\n\nAniversários:\n"
+    putStrLn "Aniversários em 30 dias:"
     putStrLn (show contactList)
-
-
 
 getContactFromUser :: IO Contact
 getContactFromUser = do

@@ -3,6 +3,8 @@
 .dist-newstyle/
 Main
 
+haskontatos.txt
+
 dist
 dist-*
 cabal-dev
