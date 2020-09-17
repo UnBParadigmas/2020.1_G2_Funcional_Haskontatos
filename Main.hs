@@ -4,6 +4,7 @@ import ContactList (
     Contact,
     createContact,
     addContact,
+    delContact,
     getNextBirthdays,
     )
 
@@ -47,7 +48,6 @@ readSavedFile = do
 saveToSaveFile :: [Contact] -> IO ()
 saveToSaveFile contacts = do
     writeFile saveFilepath (show contacts)
-    putStrLn "Salvo!(remover?)" 
 
 preapreQuit :: [Contact] -> IO ()
 preapreQuit contactList = do 
@@ -98,11 +98,11 @@ programLoop contactList = do
         else putStrLn "Que pena, nenhum aniversário próximo...";
 
 
-
-    putStrLn "\n____________________Menu_______________________\n"
+    putStrLn "\n______________________Menu______________________\n"
     
     putStrLn "[1] - Adicionar Contato"
     putStrLn "[2] - Ver todos os contatos"
+    putStrLn "[3] - Deletar Contato"
     putStrLn "[0] - Sair"
     
     putStrLn "\nDigite a opção desejada:"
@@ -120,14 +120,22 @@ programLoop contactList = do
             contactList <- programLoop contactList;
             return contactList;
         "2" -> do
+            system "clear";
             putStrLn (show contactList);
             contactList <- programLoop contactList;
             return contactList;
+        "3" -> do
+            system "clear";           
+            contactList <- delContactFromUser contactList;
+            contactList <- programLoop contactList;
+            return contactList;
+
+
 
 showNextBirthdays :: [Contact] -> IO ()
 showNextBirthdays contactList = do
 
-    putStrLn "Aniversários em 30 dias:"
+    putStrLn "Aniversáriantes do mês:"
     putStrLn (show contactList)
 
 getContactFromUser :: IO Contact
@@ -135,16 +143,26 @@ getContactFromUser = do
     putStrLn "Insira o nome:";
     name <- getLine;
     
+    system "clear";
     putStrLn "Insira o email:";
     email <- getLine;
     
+    system "clear";
     putStrLn "Insira o numero de telefone:";
     number <- getLine;
     
+    system "clear";
     putStrLn "Insira a data de nascimento (DD/MM/YYYY):";
     birthday <- getLine;
+    system "clear";
 
     newContact <- return (createContact name email number (dayFromString birthday));
     return newContact;
 
+delContactFromUser :: [Contact] -> IO [Contact]
+delContactFromUser contactList = do
+    putStrLn "Digite o nome do contato a ser deletado:";
+    name <- getLine;
 
+    newList <- return (delContact contactList name);
+    return newList;
