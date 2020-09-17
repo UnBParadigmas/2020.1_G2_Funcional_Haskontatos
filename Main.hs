@@ -29,7 +29,19 @@ main = do
 programLoop :: [Contact] -> IO b
 programLoop contactList = do 
 
-    putStrLn "Menu";
+    system "clear";
+    putStrLn "====================HASKONTATOS===================="
+    
+    currentDate <- getCurrentDate
+    birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
+
+    if birthdaysCount > 0 
+        then showNextBirthdays contactList;
+        else putStrLn "Que pena, sem aniversários próximos...";
+
+    putStrLn "====================HASKONTATOS===================="
+
+    putStrLn "Operações";
     putStrLn "1 - Adicionar Contato";
     putStrLn "2 - Ver tudo";
    
@@ -43,6 +55,12 @@ programLoop contactList = do
         "2" -> do
             putStrLn (show contactList);
             programLoop contactList;
+
+showNextBirthdays :: [Contact] -> IO ()
+showNextBirthdays contactList = do
+
+    putStrLn "\n\nAniversários:\n"
+    putStrLn (show contactList)
 
 
 
