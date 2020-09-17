@@ -2,7 +2,7 @@ build:
 	ghc Main.hs
 
 run:
-	./Main.hs
+	./Main
 
 all:
 	make build
