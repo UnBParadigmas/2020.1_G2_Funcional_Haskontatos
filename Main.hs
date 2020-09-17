@@ -47,7 +47,7 @@ readSavedFile = do
 saveToSaveFile :: [Contact] -> IO ()
 saveToSaveFile contacts = do
     writeFile saveFilepath (show contacts)
-    putStrLn "Salvo!" 
+    putStrLn "Salvo!(remover?)" 
 
 preapreQuit :: [Contact] -> IO ()
 preapreQuit contactList = do 
@@ -56,37 +56,57 @@ preapreQuit contactList = do
 
     case choice of
         "S" -> do
+            system "clear";
+            putStrLn "O Super Haskontados salvou o dia! lol" 
+            putStrLn "Ps: salvou seu contato tambem <3"
+            saveToSaveFile contactList;
+            return ()
+        "s" -> do
+            system "clear";
+            putStrLn "O Super Haskontados salvou o dia! lol" 
+            putStrLn "Ps: salvou seu contato tambem <3"
             saveToSaveFile contactList;
             return ()
         "N" -> do
+            system "clear";
+            putStrLn "Até logo! :)"
+            return ()
+        "n" -> do
+            system "clear";
+            putStrLn "Até logo! :)"
             return ()
         otherwise -> do
+            system "clear";
             putStrLn "Resposta invalida..."
             preapreQuit contactList;
+            
 
 
 
 programLoop :: [Contact] -> IO [Contact]
 programLoop contactList = do 
 
-    putStrLn "====================HASKONTATOS===================="
+    putStrLn "____________________HASKONTATOS____________________\n"
     
-    putStrLn "Hoje é:"
+    putStrLn "Data de Hoje:"
     currentDate <- getCurrentDate
     putStrLn (show currentDate)
 
     birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
     if birthdaysCount > 0 
         then showNextBirthdays (getNextBirthdays currentDate contactList)
-        else putStrLn "Que pena, sem aniversários próximos...";
+        else putStrLn "Que pena, nenhum aniversário próximo...";
 
-    putStrLn "====================HASKONTATOS===================="
 
-    putStrLn "Operações";
-    putStrLn "0 - Sair";
-    putStrLn "1 - Adicionar Contato";
-    putStrLn "2 - Ver tudo";
-   
+
+    putStrLn "\n____________________Menu_______________________\n"
+    
+    putStrLn "[1] - Adicionar Contato"
+    putStrLn "[2] - Ver todos os contatos"
+    putStrLn "[0] - Sair"
+    
+    putStrLn "\nDigite a opção desejada:"
+    
     selection <- getLine;
     
     case selection of
