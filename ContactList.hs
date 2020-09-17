@@ -13,7 +13,7 @@ addContact :: [Contact] -> Contact -> [Contact]
 addContact contactList contact = contact:contactList
 
 getNextBirthdays :: Day -> [Contact] -> [Contact]
-getNextBirthdays currentDay contacts = [x | x <- contacts, daysToBirthday currentDay x < 30]
+getNextBirthdays currentDay contacts = [x | x <- contacts, daysToBirthday currentDay x < 30, daysToBirthday currentDay x > 0]
 
 data Contact = Contact {
     name :: String,
@@ -34,7 +34,7 @@ adaptDayToTargetYear currentDay targetYear = fromGregorian targetYear month day
                 (_, month, day) = toGregorian currentDay
 
 daysToBirthday :: Day -> Contact -> Integer
-daysToBirthday day contact = diffDays day birthdayDay
+daysToBirthday day contact = diffDays birthdayDay day
             where 
                 (targetYear, _, _) = toGregorian day
                 birthdayDay = adaptDayToTargetYear (birthday contact) targetYear

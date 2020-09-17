@@ -4,7 +4,7 @@ import ContactList (
     Contact,
     createContact,
     addContact,
-    getNextBirthdays
+    getNextBirthdays,
     )
 
 import Util (
@@ -71,11 +71,13 @@ programLoop contactList = do
 
     putStrLn "====================HASKONTATOS===================="
     
+    putStrLn "Hoje é:"
     currentDate <- getCurrentDate
-    birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
+    putStrLn (show currentDate)
 
+    birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
     if birthdaysCount > 0 
-        then showNextBirthdays contactList;
+        then showNextBirthdays (getNextBirthdays currentDate contactList)
         else putStrLn "Que pena, sem aniversários próximos...";
 
     putStrLn "====================HASKONTATOS===================="
