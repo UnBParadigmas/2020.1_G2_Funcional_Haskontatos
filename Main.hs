@@ -105,7 +105,7 @@ preapreQuit contactList = do
 
 programLoop :: [Contact] -> IO [Contact]
 programLoop contactList = do 
-    -- system "clear";
+    system "clear";
     putStrLn "____________________HASKONTATOS____________________\n"
 
     putStrLn "Data de Hoje:"
