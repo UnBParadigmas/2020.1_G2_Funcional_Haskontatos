@@ -14,16 +14,25 @@
 
 
 ## Sobre 
-O projeto é uma agenda feita em Haskell para salvar e manter contatos com Nome, Aniversário, Email e Telefone. A agenda possui funcionalidades de criar, ler, editar e remover contatos, buscar contatos por uma substring do nome e salvar a lista de contatos criada em arquivo. 
 
-<!-- ## Screenshots
-Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento. -->
+O software Haskontatos é um programa de agenda de contatos escrito em Haskell, criado para evoluir os conhecimentos na linguagem e também no paradigma de programação funcional. Nele é possível cadastrar contatos (nome, email, telefone e data de aniversário), os contatos são persistidos em um arquivo. A agenda possui funcionalidades de criar, ler, editar e remover contatos, buscar contatos por uma substring do nome, mostrar os aniversariantes do mês e salvar a lista de contatos criada em arquivo. 
+
+## Screenshots
+
+![](./img/print1.png)
+
+![](./img/print2.png)
 
 ## Instalação e Execução
 **Linguagens**: Haskell<br>
-<!-- **Tecnologias**: xxxxxx<br> -->
 
 Para rodar o projeto é necessário ter o GHCI instalado. 
+
+É necessário instalar as dependencias pelo cabal:
+```sh
+
+cabal install email-validate
+```
 
 O projeto possui um Makefile para auxiliar na compilação e execução do código. Siga os passos abaixo para executar a aplicação:
 
@@ -45,13 +54,15 @@ Ao iniciar o programa, caso já exista uma lista de contatos ela será carregada
 [0] - Sair
 ```
 
-O usuário deve selecionar a opção desejada e seguir as intruções do programa.
+O usuário deve selecionar a opção desejada e seguir as intruções do programa. Ao selecionar a opção de sair, será oferecido para salvar a lista de contatos.
 
-<!-- ## Vídeo
-Adicione 1 ou mais vídeos com a execução do projeto. -->
+## Vídeo
+Clique na imagem abaixo para ver o vídeo do programa funcionando:
+
+[<img src="https://img.youtube.com/vi/ggt-cIWazMM/maxresdefault.jpg">](https://youtu.be/ggt-cIWazMM)
 
 <!-- ## Outros 
 Quaisquer outras informações sobre seu projeto podem ser descritas a seguir. -->
 
-<!-- ## Fontes
-Caso utilize materiais de terceiros, referencie-os adequadamente. -->
+## Fontes
+[email-validate](https://hackage.haskell.org/package/email-validate)
