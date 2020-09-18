@@ -133,7 +133,7 @@ programLoop contactList = do
             contactList <- programLoop contactList;
             return contactList;
         "2" -> do
-            putStrLn (show contactList);
+            showContacts contactList;
             _ <- getLine
             contactList <- programLoop contactList;
             return contactList;
@@ -148,6 +148,11 @@ programLoop contactList = do
             return contactList;
 
 
+showContacts :: [Contact] -> IO [()]
+showContacts contactList = do
+    system "clear";
+    putStrLn "Todos os contatos salvos:\n\n"
+    mapM displayContact contactList;
 
 showNextBirthdays :: [Contact] -> IO ()
 showNextBirthdays contactList = do
