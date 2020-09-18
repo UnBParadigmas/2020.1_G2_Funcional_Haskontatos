@@ -12,6 +12,14 @@ import Util (
     getCurrentDate
     )
 
+import Service (
+    validateName
+    )
+
+-- import Text.Email.Validate (
+--     isValid
+--     )
+
 import Data.Time (
     Day,
     addDays
@@ -25,45 +33,45 @@ saveFilepath :: String
 saveFilepath = "./haskontatos.txt"
 
 main :: IO ()
-main = do   
+main = do
 
     system "clear";
 
-    startupList <- readSavedFile; 
+    startupList <- readSavedFile;
     contacts <- programLoop startupList;
     preapreQuit contacts;
 
 readSavedFile :: IO [Contact]
 readSavedFile = do
-    
+
     fileExist <- doesFileExist saveFilepath
-        
+
     if fileExist
         then do
             content <- readFile saveFilepath
-            return (read content) 
+            return (read content)
         else return []
 
 saveToSaveFile :: [Contact] -> IO ()
 saveToSaveFile contacts = do
     writeFile saveFilepath (show contacts)
-    putStrLn "Salvo!(remover?)" 
+    putStrLn "Salvo!(remover?)"
 
 preapreQuit :: [Contact] -> IO ()
-preapreQuit contactList = do 
+preapreQuit contactList = do
     putStrLn "Salvar? S/N"
     choice <- getLine;
 
     case choice of
         "S" -> do
             system "clear";
-            putStrLn "O Super Haskontados salvou o dia! lol" 
+            putStrLn "O Super Haskontados salvou o dia! lol"
             putStrLn "Ps: salvou seu contato tambem <3"
             saveToSaveFile contactList;
             return ()
         "s" -> do
             system "clear";
-            putStrLn "O Super Haskontados salvou o dia! lol" 
+            putStrLn "O Super Haskontados salvou o dia! lol"
             putStrLn "Ps: salvou seu contato tambem <3"
             saveToSaveFile contactList;
             return ()
@@ -79,41 +87,41 @@ preapreQuit contactList = do
             system "clear";
             putStrLn "Resposta invalida..."
             preapreQuit contactList;
-            
+
 
 
 
 programLoop :: [Contact] -> IO [Contact]
-programLoop contactList = do 
+programLoop contactList = do
 
     putStrLn "____________________HASKONTATOS____________________\n"
-    
+
     putStrLn "Data de Hoje:"
     currentDate <- getCurrentDate
     putStrLn (show currentDate)
 
     birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
-    if birthdaysCount > 0 
+    if birthdaysCount > 0
         then showNextBirthdays (getNextBirthdays currentDate contactList)
         else putStrLn "Que pena, nenhum aniversário próximo...";
 
 
 
     putStrLn "\n____________________Menu_______________________\n"
-    
+
     putStrLn "[1] - Adicionar Contato"
     putStrLn "[2] - Ver todos os contatos"
     putStrLn "[0] - Sair"
-    
+
     putStrLn "\nDigite a opção desejada:"
-    
+
     selection <- getLine;
-    
+
     case selection of
         "0" -> do
             system "clear";
             return contactList;
-        "1" -> do 
+        "1" -> do
             system "clear";
             contact <- getContactFromUser;
             contactList <- return (addContact contactList contact)
@@ -133,14 +141,14 @@ showNextBirthdays contactList = do
 getContactFromUser :: IO Contact
 getContactFromUser = do
     putStrLn "Insira o nome:";
-    name <- getLine;
-    
+    name <- getNameFromUser;
+
     putStrLn "Insira o email:";
     email <- getLine;
-    
+
     putStrLn "Insira o numero de telefone:";
     number <- getLine;
-    
+
     putStrLn "Insira a data de nascimento (DD/MM/YYYY):";
     birthday <- getLine;
 
@@ -148,3 +156,12 @@ getContactFromUser = do
     return newContact;
 
 
+getNameFromUser :: IO String
+getNameFromUser = do
+    name <- getLine;
+    if validateName name
+        then return name
+        else do
+            putStrLn "Nome inválido!";
+            name <- getNameFromUser
+            return name;
