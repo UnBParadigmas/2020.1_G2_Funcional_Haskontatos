@@ -4,6 +4,7 @@ module ContactList
      Contact,
      createContact,
      addContact,
+     delContact,
      getNextBirthdays,
     ) where
 
@@ -11,6 +12,9 @@ import Data.Time ( Day, diffDays, fromGregorian, toGregorian )
 
 addContact :: [Contact] -> Contact -> [Contact]
 addContact contactList contact = contact:contactList
+
+delContact :: [Contact] -> String -> [Contact]
+delContact contactList searchName = [contact | contact <- contactList, (name contact) /=searchName]
 
 getNextBirthdays :: Day -> [Contact] -> [Contact]
 getNextBirthdays currentDay contacts = [x | x <- contacts, daysToBirthday currentDay x < 30, daysToBirthday currentDay x > 0]
