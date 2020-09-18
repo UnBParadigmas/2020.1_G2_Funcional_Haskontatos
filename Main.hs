@@ -50,8 +50,9 @@ saveToSaveFile contacts = do
     writeFile saveFilepath (show contacts)
 
 preapreQuit :: [Contact] -> IO ()
-preapreQuit contactList = do 
-    putStrLn "Salvar? S/N"
+preapreQuit contactList = do
+    system "clear"; 
+    putStrLn "\nSalvar? S/N"
     choice <- getLine;
 
     case choice of
@@ -85,7 +86,7 @@ preapreQuit contactList = do
 
 programLoop :: [Contact] -> IO [Contact]
 programLoop contactList = do 
-
+    system "clear";
     putStrLn "____________________HASKONTATOS____________________\n"
     
     putStrLn "Data de Hoje:"
@@ -98,7 +99,7 @@ programLoop contactList = do
         else putStrLn "Que pena, nenhum aniversário próximo...";
 
 
-    putStrLn "\n______________________Menu______________________\n"
+    putStrLn "\n_______________________Menu________________________\n"
     
     putStrLn "[1] - Adicionar Contato"
     putStrLn "[2] - Ver todos os contatos"
@@ -111,21 +112,18 @@ programLoop contactList = do
     
     case selection of
         "0" -> do
-            system "clear";
             return contactList;
         "1" -> do 
-            system "clear";
             contact <- getContactFromUser;
             contactList <- return (addContact contactList contact)
             contactList <- programLoop contactList;
             return contactList;
         "2" -> do
-            system "clear";
             putStrLn (show contactList);
+            _ <- getLine
             contactList <- programLoop contactList;
             return contactList;
-        "3" -> do
-            system "clear";           
+        "3" -> do          
             contactList <- delContactFromUser contactList;
             contactList <- programLoop contactList;
             return contactList;
@@ -143,15 +141,12 @@ getContactFromUser = do
     putStrLn "Insira o nome:";
     name <- getLine;
     
-    system "clear";
     putStrLn "Insira o email:";
     email <- getLine;
     
-    system "clear";
     putStrLn "Insira o numero de telefone:";
     number <- getLine;
     
-    system "clear";
     putStrLn "Insira a data de nascimento (DD/MM/YYYY):";
     birthday <- getLine;
     system "clear";
