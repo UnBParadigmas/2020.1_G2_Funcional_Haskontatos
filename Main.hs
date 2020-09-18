@@ -257,7 +257,7 @@ updateContactFromUser contactList = do
             updatedList <- updateContactFromUser contactList;
             return updatedList;
         else do
-            contCurrent <- return (head contactList);
+            contCurrent <- return (head result);
 
             putStrLn "Aperte enter caso não deseje alterar o valor."
             putStrLn "Contato selecionado:"
