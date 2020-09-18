@@ -6,6 +6,11 @@ import ContactList (
     addContact,
     delContact,
     getNextBirthdays,
+    getContactsByName,
+    name,
+    email,
+    telephone,
+    birthday
     )
 
 import Util (
@@ -112,6 +117,7 @@ programLoop contactList = do
     putStrLn "[1] - Adicionar Contato"
     putStrLn "[2] - Ver todos os contatos"
     putStrLn "[3] - Deletar Contato"
+    putStrLn "[4] - Buscar contato por nome"
     putStrLn "[0] - Sair"
 
     putStrLn "\nDigite a opção desejada:"
@@ -133,6 +139,11 @@ programLoop contactList = do
             return contactList;
         "3" -> do
             contactList <- delContactFromUser contactList;
+            contactList <- programLoop contactList;
+            return contactList;
+        "4" -> do
+            searchContact contactList;
+            _ <- getLine;
             contactList <- programLoop contactList;
             return contactList;
 
@@ -179,3 +190,19 @@ getNameFromUser = do
             putStrLn "Nome inválido!";
             name <- getNameFromUser
             return name;
+
+searchContact :: [Contact] -> IO [()]
+searchContact contactList = do
+    putStrLn "Insira o nome do contato:";
+    name <- getLine;
+    filteredContacts <- return (getContactsByName contactList name);
+    putStrLn "\nResultado da busca:\n";
+    mapM displayContact filteredContacts;
+
+displayContact :: Contact -> IO ()
+displayContact contact =  do
+    putStrLn (show (name contact));
+    putStrLn (show (email contact));
+    putStrLn (show (telephone contact));
+    putStrLn (show (birthday contact));
+    putStrLn "\n----------------------------\n";

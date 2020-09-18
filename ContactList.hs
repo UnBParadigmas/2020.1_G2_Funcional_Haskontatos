@@ -50,7 +50,6 @@ daysToBirthday day contact = diffDays birthdayDay day
                 (targetYear, _, _) = toGregorian day
                 birthdayDay = adaptDayToTargetYear (birthday contact) targetYear
 
--- Search for name substring in contact list
 getContactsByName :: [Contact] -> String -> [Contact]
 getContactsByName contactList nameSubString = [x | x <- contactList , isInfixOf (map toLower nameSubString) (map toLower (name x)) ]
 
