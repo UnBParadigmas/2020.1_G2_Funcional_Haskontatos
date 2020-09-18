@@ -6,9 +6,16 @@ module ContactList
      addContact,
      delContact,
      getNextBirthdays,
+     getContactsByName,
+     name,
+     email,
+     telephone,
+     birthday
     ) where
 
 import Data.Time ( Day, diffDays, fromGregorian, toGregorian )
+import Data.List (isInfixOf)
+import Data.Char (toLower)
 
 addContact :: [Contact] -> Contact -> [Contact]
 addContact contactList contact = contact:contactList
@@ -42,3 +49,9 @@ daysToBirthday day contact = diffDays birthdayDay day
             where 
                 (targetYear, _, _) = toGregorian day
                 birthdayDay = adaptDayToTargetYear (birthday contact) targetYear
+
+-- Search for name substring in contact list
+getContactsByName :: [Contact] -> String -> [Contact]
+getContactsByName contactList nameSubString = [x | x <- contactList , isInfixOf (map toLower nameSubString) (map toLower (name x)) ]
+
+
