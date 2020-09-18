@@ -24,9 +24,13 @@ import Service (
     validateName
     )
 
--- import Text.Email.Validate (
---     isValid
---     )
+import Text.Email.Validate (
+    isValid
+    )
+    
+import Data.ByteString.UTF8  (
+    fromString
+    )
 
 import Data.Time (
     Day,
@@ -178,7 +182,7 @@ getContactFromUser = do
     name <- getNameFromUser;
 
     putStrLn "Insira o email:";
-    email <- getLine;
+    email <- getEmailFromUser;
 
     putStrLn "Insira o numero de telefone:";
     number <- getLine;
@@ -208,13 +212,18 @@ getNameFromUser = do
             name <- getNameFromUser
             return name;
 
--- -- getEmailFromUserNameFromUser :-- getEmailFromUserNameFromUs-- byteEmail do
---getLinee <- g-- etLisValidvbyteEmailateName name
---         byteEmail return name
---         else do
---           EmailtStrLn "Nome inválido!";
---             ngetEmailFromUserNameFromUser
---             return name;
+getEmailFromUser :: IO String
+getEmailFromUser = do
+       
+        emailText <- getLine;
+        email <- return (fromString emailText); 
+        if isValid email 
+            then do
+                return emailText;
+            else do
+                putStrLn "Email inválido!";
+                getEmailFromUser;
+        
 
 searchContact :: [Contact] -> IO [Contact]
 searchContact contactList = do
