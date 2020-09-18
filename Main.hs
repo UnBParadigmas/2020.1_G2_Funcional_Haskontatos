@@ -111,11 +111,8 @@ programLoop contactList = do
     putStrLn "Data de Hoje:"
     currentDate <- getCurrentDate
     putStrLn (show currentDate)
-
-    birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
-    if birthdaysCount > 0
-        then showNextBirthdays (getNextBirthdays currentDate contactList)
-        else putStrLn "Que pena, nenhum aniversário próximo...";
+    
+    showNextBirthdays (getNextBirthdays currentDate contactList) currentDate;
 
 
     putStrLn "\n_______________________Menu________________________\n"
@@ -170,11 +167,21 @@ showContacts contactList = do
     putStrLn "Todos os contatos salvos:\n\n"
     mapM displayContact contactList;
 
-showNextBirthdays :: [Contact] -> IO ()
-showNextBirthdays contactList = do
+showNextBirthdays :: [Contact] -> Day -> IO [()]
+showNextBirthdays contactList currentDate = do
+    birthdaysCount <- return (length (getNextBirthdays currentDate contactList))
 
-    putStrLn "Aniversáriantes do mês:"
-    putStrLn (show contactList)
+    if birthdaysCount > 0 
+        then
+            putStrLn "Aniversáriantes do mês:"
+        else 
+            putStrLn "Que pena, nenhum aniversário próximo..."
+
+    mapM showBirthday contactList;
+
+showBirthday :: Contact -> IO ()
+showBirthday contact = do
+    putStrLn (show (name contact) ++ " - " ++ show (birthday contact));
 
 getContactFromUser :: IO Contact
 getContactFromUser = do
