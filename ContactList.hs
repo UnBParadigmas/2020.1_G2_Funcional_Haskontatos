@@ -5,6 +5,7 @@ module ContactList
      createContact,
      addContact,
      delContact,
+     updateContact,
      getNextBirthdays,
      getContactsByName,
      name,
@@ -22,6 +23,9 @@ addContact contactList contact = contact:contactList
 
 delContact :: [Contact] -> String -> [Contact]
 delContact contactList searchName = [contact | contact <- contactList, (name contact) /=searchName]
+
+updateContact :: [Contact] -> String -> [Contact]
+updateContact contactList searchName = [x | x <- contactList, (name x) == searchName]
 
 getNextBirthdays :: Day -> [Contact] -> [Contact]
 getNextBirthdays currentDay contacts = [x | x <- contacts, daysToBirthday currentDay x < 30, daysToBirthday currentDay x > 0]
@@ -52,5 +56,7 @@ daysToBirthday day contact = diffDays birthdayDay day
 
 getContactsByName :: [Contact] -> String -> [Contact]
 getContactsByName contactList nameSubString = [x | x <- contactList , isInfixOf (map toLower nameSubString) (map toLower (name x)) ]
+
+
 
 

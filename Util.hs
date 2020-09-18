@@ -1,5 +1,6 @@
 module Util (
     dayFromString,
+    getUpdated,
     getCurrentDate
     ) where
 
@@ -16,3 +17,8 @@ dayFromString dateStr = fromGregorian year month day
 
 getCurrentDate :: IO Day
 getCurrentDate = getCurrentTime >>= return . utctDay
+
+getUpdated :: String -> String -> String
+getUpdated original change = if change == ""
+                                then original
+                                else change

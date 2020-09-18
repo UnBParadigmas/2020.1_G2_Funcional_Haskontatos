@@ -5,6 +5,7 @@ import ContactList (
     createContact,
     addContact,
     delContact,
+    updateContact,
     getNextBirthdays,
     getContactsByName,
     name,
@@ -15,6 +16,7 @@ import ContactList (
 
 import Util (
     dayFromString,
+    getUpdated,
     getCurrentDate
     )
 
@@ -99,7 +101,7 @@ preapreQuit contactList = do
 
 programLoop :: [Contact] -> IO [Contact]
 programLoop contactList = do 
-    system "clear";
+    -- system "clear";
     putStrLn "____________________HASKONTATOS____________________\n"
 
     putStrLn "Data de Hoje:"
@@ -118,6 +120,7 @@ programLoop contactList = do
     putStrLn "[2] - Ver todos os contatos"
     putStrLn "[3] - Deletar Contato"
     putStrLn "[4] - Buscar contato por nome"
+    putStrLn "[5] - Atualizar contato"
     putStrLn "[0] - Sair"
 
     putStrLn "\nDigite a opção desejada:"
@@ -142,9 +145,18 @@ programLoop contactList = do
             contactList <- programLoop contactList;
             return contactList;
         "4" -> do
-            searchContact contactList;
+            filteredContacts <- searchContact contactList;
+            putStrLn "\nResultado da busca:\n";
+            mapM displayContact filteredContacts;
             _ <- getLine;
             contactList <- programLoop contactList;
+            return contactList;
+        "5" -> do
+            contactList <- updateContactFromUser contactList;
+            _ <- getLine;
+            putStrLn (show contactList);
+            contactList <- programLoop contactList;
+
             return contactList;
 
 
@@ -196,13 +208,20 @@ getNameFromUser = do
             name <- getNameFromUser
             return name;
 
-searchContact :: [Contact] -> IO [()]
+-- -- getEmailFromUserNameFromUser :-- getEmailFromUserNameFromUs-- byteEmail do
+--getLinee <- g-- etLisValidvbyteEmailateName name
+--         byteEmail return name
+--         else do
+--           EmailtStrLn "Nome inválido!";
+--             ngetEmailFromUserNameFromUser
+--             return name;
+
+searchContact :: [Contact] -> IO [Contact]
 searchContact contactList = do
     putStrLn "Insira o nome do contato:";
     name <- getLine;
     filteredContacts <- return (getContactsByName contactList name);
-    putStrLn "\nResultado da busca:\n";
-    mapM displayContact filteredContacts;
+    return filteredContacts;
 
 displayContact :: Contact -> IO ()
 displayContact contact =  do
@@ -210,4 +229,52 @@ displayContact contact =  do
     putStrLn (show (email contact));
     putStrLn (show (telephone contact));
     putStrLn (show (birthday contact));
-    putStrLn "\n----------------------------\n";
+    putStrLn "\n____________________________\n";
+
+updateContactFromUser :: [Contact] -> IO [Contact]
+updateContactFromUser contactList = do
+
+    result <- searchContact contactList;
+    if length result < 1
+       then do
+            putStrLn "\nContato não encontrado, tente novamente :("
+            updatedList <- updateContactFromUser contactList;
+            return updatedList;
+        else do
+            contCurrent <- return (head contactList);
+
+            putStrLn "Aperte enter caso não deseje alterar o valor."
+            putStrLn "Contato selecionado:"
+
+            displayContact contCurrent;
+
+            putStrLn "Alterar Nome: "
+            upName <- getLine;
+            upName <- return (getUpdated (name contCurrent) upName);
+
+            putStrLn "Alterar Email: "
+            upEmail <- getLine;
+            upEmail <- return (getUpdated (email contCurrent) upEmail);
+
+            putStrLn "Alterar Telefone: "
+            upTelephone <- getLine;
+            upTelephone <- return (getUpdated (telephone contCurrent) upTelephone);
+
+            putStrLn "Alterar Aniversário: "
+            upBirthdayText <- getLine;
+            upBirthday <- if upBirthdayText == ""
+                then do
+                    return (birthday contCurrent);
+                else do
+                    return (dayFromString upBirthdayText);
+
+            updatedContact <- return (createContact upName upEmail upTelephone upBirthday);
+            originalName <- return (name contCurrent);
+
+            cleanedList <- return (delContact contactList originalName);
+
+            updatedList <- return (addContact cleanedList updatedContact);
+
+            putStrLn "Alterado com sucesso"
+            return updatedList;
+
