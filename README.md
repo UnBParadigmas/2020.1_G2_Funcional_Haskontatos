@@ -37,16 +37,16 @@
 rode o seguinte comando via terminial
 
 ```sh
-cabal configure && cabal build && cabal install
+cabal update && cabal configure && cabal build && cabal install
 
 ```
 <p align="justify">este comando irá utilizar do arquivo __haskontatos.cabal__ para realizar a instalação das dependências.
 
 ```sh
-
-cabal install email-validate
-cabal install bytestring
-cabal install utf8-string
+cabal update &&
+cabal install email-validate \
+    bytestring \
+    utf8-string
 ```
 ## Alternativas
 <hr>
