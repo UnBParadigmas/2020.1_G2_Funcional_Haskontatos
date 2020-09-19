@@ -1,13 +1,10 @@
 build:
-	ghc Main.hs
+	cabal configure
+	cabal build
 
 run:
-	./Main
+	cabal run
 
 all:
 	make build
 	make run
-
-deps: 
-	cabal update
-	cabal install email-validate
